@@ -116,9 +116,9 @@ export default {
       myValue: this.value,
       init: {
         selector: "#tinymce",
-        language_url: "/tinymce/langs/zh_TW.js",
+        language_url: "../../../public/tinymce/langs/zh_TW.js",
         language: "zh_TW",
-        skin_url: "/tinymce/skins/ui/oxide", //皮膚
+        skin_url: "../../../public/tinymce/skins/ui/oxide", //皮膚
         plugins: this.plugins, //插件
         //工具欄
         toolbar: this.toolbar,
