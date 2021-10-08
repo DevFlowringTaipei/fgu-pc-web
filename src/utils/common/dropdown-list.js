@@ -21,6 +21,7 @@ const signUpIdentityOptions = [
   },
 ];
 
+
 const statusOptions = [
   {
     value: 1,
@@ -29,6 +30,17 @@ const statusOptions = [
   {
     value: 0,
     label: "禁用",
+  },
+];
+
+const isTemplateOptions = [
+  {
+    value: 1,
+    label: "設為範本",
+  },
+  {
+    value: 0,
+    label: "不設為範本",
   },
 ];
 const educationOptions = [
@@ -206,4 +218,5 @@ export {
   statusOptions,
   identityOptions,
   signUpIdentityOptions,
+  isTemplateOptions,
 };

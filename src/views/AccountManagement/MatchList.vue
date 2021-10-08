@@ -1,5 +1,6 @@
 <template>
   <div class="q-pa-md" style="">
+    <!-- 搜尋 -->
     <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm " style="">
       <!-- input -->
       <div :class="$q.screen.lt.sm ? 'col-12 q-mb-sm' : 'col-md-4'">
@@ -132,13 +133,13 @@
         ></com-pagination>
       </div>
     </div>
-    <!-- 旅遊 -->
+    <!-- 遊程 -->
     <div
       v-else-if="data.totalNum && data.type === 2"
       class="row q-col-gutter-x-sm q-col-gutter-y-sm search-box   "
     >
       <div class="col-12">
-        <span>您共找到{{ data.totalNum }}個旅遊</span>
+        <span>您共找到{{ data.totalNum }}個遊程</span>
       </div>
 
       <q-card
@@ -203,9 +204,9 @@
               <div class="text-h6 q-mt-sm q-mb-xs ">{{ item.price }}元起</div>
               <q-btn
                 color="primary"
-                label="立即參加"
+                label="詳細資訊"
                 size="md"
-                @click="onSubmit"
+                @click="goTo('PageDetail',item.id)"
               ></q-btn>
             </div>
           </q-card-section>
@@ -266,6 +267,7 @@
 </template>
 <script>
 import ComPagination from "@/components/Common/form/ComPagination";
+import Mixin from '@/utils/mixin'
 const typeOptions = [
   { label: "專才", value: 1 },
   { label: "遊程", value: 2 },
@@ -278,8 +280,7 @@ const rowOptions = [
   { label: "200筆/頁", value: 200 },
 ];
 export default {
-  // 組件參數 接收來自父組件的數據
-  props: {},
+  mixins:[Mixin],
   // 局部注冊的組件
   components: { ComPagination },
   data() {
@@ -376,6 +377,7 @@ export default {
         ],
         cardData2: [
           {
+            id:1,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)1",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -388,6 +390,7 @@ export default {
             price: 3999,
           },
           {
+            id:2,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)2",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -400,6 +403,7 @@ export default {
             price: 1999,
           },
           {
+            id:3,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)3",
             services: [
@@ -418,6 +422,7 @@ export default {
             price: 1599,
           },
           {
+            id:4,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)4",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -430,6 +435,7 @@ export default {
             price: 1799,
           },
           {
+            id:5,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)5",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -442,6 +448,7 @@ export default {
             price: 999,
           },
           {
+            id:6,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)6",
             services: ["服務類型1", "服務類型2", "服務類型3"],

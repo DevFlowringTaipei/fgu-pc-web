@@ -23,11 +23,18 @@ const routes = [
             meta: { title: "帳號管理/個人設定" },
           },
           {
-            path:"/matched",
+            path:"matched",
             name:"MatchList",
             component: () => import("@/views/AccountManagement/MatchList"),
             meta: { title: "帳號管理/查詢曾經媒合遊程和專才" },
           },
+          {
+            path:"detail",
+            name:"PageDetail",
+            component: () => import("@/views/AccountManagement/PageDetail"),
+            meta: { title: "帳號管理/查詢曾經媒合遊程詳細資訊" },
+          },
+
           
         ],
         meta: { title: "帳號管理" },
@@ -99,6 +106,19 @@ const routes = [
             name:"PendingReview",
             component: () => import("@/views/TourManagement/PendingReview"),
             meta: { title: "遊程管理/待審核遊程" },
+          },
+          {
+            path: 'tour-detail',
+            // path: '/tour-detail/:id?',
+            name:"TourDetail",
+            component: () => import("@/views/TourManagement/TourDetail"),
+            meta: { title: "遊程管理/遊程詳情" },
+          },
+          {
+            path: '/tour-review',
+            name:"TourReview",
+            component: () => import("@/views/TourManagement/TourReview"),
+            meta: { title: "遊程管理/遊程審核" },
           },
           
         ],

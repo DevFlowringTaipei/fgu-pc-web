@@ -18,7 +18,7 @@
           class="q-mr-sm"
           color="amber"
           label="修改"
-          @click="openDialog(rowData)"
+          @click="goTo('TourDetail',id=rowData.id)"
         />
         <q-btn
           size="xs"
@@ -28,71 +28,7 @@
         />
       </template>
 
-      <template v-slot:dialog-content>
-        <!-- <div class="row q-col-gutter-x-sm q-col-gutter-y-sm q-pa-md">
-          <div class="col-12 col-md-6">
-            <com-input
-              ref="comCheck"
-              v-model="dialogForm.name"
-              form-label="專業輔導"
-              :required-valid="true"
-              hide-bottom-space
-              :rules="[(val) => (val && val.length > 0) || '此欄位為必填項']"
-            ></com-input>
-          </div>
-          <div
-            class="col-12 col-md-6 "
-            style="display:flex;flex-direction:column;"
-            :style="
-              $q.screen.lt.sm
-                ? 'flex-direction:row;border:1px solid rgba(0,0,0,0.24);padding-top:0px;margin-left:8px;padding-left:4px;width:inherit;flex:1;margin-top:8px;border-radius:4px;'
-                : ''
-            "
-          >
-            <span class="" :style="$q.screen.lt.sm ? 'padding-top:10px;' : ''"
-              >狀態</span
-            >
 
-            <q-option-group
-              style="margin-left:-12px;"
-              v-model="dialogForm.status"
-              :options="statusOptions"
-              inline
-              type="radio"
-              class=""
-            />
-            
-          </div>
-          <div class="col-12 ">
-            <com-input
-              v-model="dialogForm.note"
-              form-label="備註"
-              type="textarea"
-            ></com-input>
-          </div>
-        </div>
-        <div
-          class="row col-12 q-col-gutter-x-sm q-col-gutter-y-sm q-mt-md justify-end"
-        >
-          <div class="q-pa-md q-gutter-sm">
-            <q-btn
-              type="reset"
-              size="sm"
-              color="white"
-              text-color="black"
-              label="取消"
-              v-close-popup
-            />
-            <q-btn
-              type="submit"
-              size="sm"
-              color="primary"
-              label="保存"
-              @click="onSubmit()"
-            />
-          </div>
-        </div> -->
-      </template>
     </table-dialog>
     <div class="row justify-center q-mt-md ">
       <com-pagination
@@ -111,9 +47,9 @@ import ComForm from "@/components/Common/form/ComForm.vue";
 import ComInput from "@/components/Common/form/ComInput.vue";
 import TableDialog from "@/components/Common/table/TableDialog.vue";
 import ComPagination from "@/components/Common/form/ComPagination";
+import Mixin from "@/utils/mixin";
 export default {
-  // 組件參數 接收來自父組件的數據
-  props: {},
+  mixins: [Mixin],
   // 局部注冊的組件
   components: {ComPagination, TableDialog,ComInput,ComForm},
   data() {
@@ -147,18 +83,18 @@ export default {
       ],
       tableData: [
         {
-          id: 1,
+          id: 7,
           cid: 1,
           name: "花蓮一日遊",
           applicant: "王大寶",
         },
         {
-          id: 2,
+          id: 8,
           cid: 2,
           name: "高雄一日遊",
           applicant: "林阿美",
         },
-        { id: 3, cid: 3, name: "基隆美食之旅", applicant: "朱曉明" },
+        { id: 9, cid: 3, name: "基隆美食之旅", applicant: "朱曉明" },
       ],
     };
   },

@@ -1,7 +1,16 @@
 <template>
   <div class="">
+    <q-btn
+      v-if="$route.name == 'TourDetail' || $route.name == 'TourReview'"
+      icon="chevron_left"
+      label="返回查詢頁"
+      @click="goBack"
+    ></q-btn>
     <q-tabs
-      v-if="true"
+      v-else-if="
+        (true && $route.name != 'TourDetail') ||
+          (true && $route.name != 'TourReview')
+      "
       v-model="tab"
       dense
       align="left"
@@ -24,10 +33,12 @@
       :breakpoint="0"
       @input="changeTab"
     >
-      <q-tab name="ShowList" label="待審核遊程" />
+      <q-tab name="PendingReview" label="待審核遊程" />
     </q-tabs>
 
-    <q-separator />
+    <q-separator
+      v-if="$route.name != 'TourDetail' || $route.name != 'TourReview'"
+    />
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel :name="tab">
@@ -38,14 +49,15 @@
 </template>
 
 <script>
-
+import Mixin from "@/utils/mixin";
 export default {
+  mixins: [Mixin],
   data() {
     return {
       tab: this.$route.name,
     };
   },
-  
+
   methods: {
     changeTab(e) {
       this.$router.push({
@@ -53,6 +65,9 @@ export default {
       });
     },
   },
+  created(){
+    this.tab=this.$route.name
+  }
 };
 </script>
 

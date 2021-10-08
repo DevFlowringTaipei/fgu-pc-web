@@ -1,6 +1,8 @@
 <template>
   <div class="">
+    <q-btn v-if="$route.name=='PageDetail'" icon="chevron_left" label='返回查詢頁' @click="goBack"></q-btn>
     <q-tabs
+      v-else
       v-model="tab"
       dense
       align="left"
@@ -13,7 +15,7 @@
       <q-tab name="MatchList" label="查詢曾經媒合遊程和專才" />
     </q-tabs>
 
-    <q-separator />
+    <q-separator v-if="$route.name!='PageDetail'" />
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel :name="tab">
@@ -24,7 +26,9 @@
 </template>
 
 <script>
+import Mixin from '@/utils/mixin'
 export default {
+  mixins:[Mixin],
   data() {
     return {
       tab:this.$route.name

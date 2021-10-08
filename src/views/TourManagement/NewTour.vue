@@ -1,12 +1,29 @@
 <template>
-  <div :class="$q.screen.lt.sm? 'q-pa-xs':'q-pa-md'" style="">
+  <div :class="$q.screen.lt.sm ? 'q-pa-xs' : 'q-pa-md'" style="">
     <div
       class="row col-12 justify-center"
-      style="flex-direction:column;align-items:center"
+      style="align-items:center"
+      :style="
+        $q.screen.lt.sm ? 'flex-direction:column;' : 'flex-direction:row;'
+      "
     >
       <span class="text-center" style="font-size:24px;font-weight:bold;"
         >佛光大學產學與育成中心 體驗遊程上架申請表</span
       >
+      <q-select
+        outlined
+        v-model="picked_template"
+        stack-label
+        :options="templateOptions"
+        dense
+        behavior="menu"
+        emit-value
+        map-options
+        :option-label="(item) => (item === '' ? '請選擇套用範本' : item.label)"
+        :style="$q.screen.lt.sm ? '' : 'width:200px;margin-left:10px;'"
+        @input="useTemplate"
+      >
+      </q-select>
     </div>
     <!-- 基本資料 -->
     <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm">
@@ -38,7 +55,7 @@
               form-label="活動地點"
             ></com-input>
           </div>
-       
+
           <div class="col-6 col-md-4">
             <com-select-date
               :range="false"
@@ -69,12 +86,13 @@
           </div>
         </div>
       </div>
-      <div class="col-12" :style="$q.screen.lt.sm ? 'order:2' : ''">
-        <com-input
-          v-model="dataForm.desc"
-          form-label="活動遊程介紹"
-          type="textarea"
-        ></com-input>
+      <!-- 活動遊程介紹(Editor)  -->
+
+      <div class="col-12 q-mb-xs" :style="$q.screen.lt.sm ? 'order:2' : ''">
+        <span class="text-center" style="font-size:16px;font-weight:bold;"
+          >活動遊程介紹</span
+        >
+        <tiny-mce ref="editor" v-model="dataForm.desc" @onClick="onClick" />
       </div>
       <div class="col-12" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
@@ -113,10 +131,11 @@
           form-label="活動費用"
         ></com-input>
       </div>
+
     </div>
     <!-- 服務類型選單 -->
-    <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm">
-      <div v-if="!$q.screen.lt.sm" class="col-8">
+    <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-md">
+      <div v-if="!$q.screen.lt.sm" class="col-12">
         <q-markup-table>
           <thead>
             <tr>
@@ -300,76 +319,46 @@
         </q-table>
       </div>
     </div>
-    <!-- 審核 -->
-    <!-- <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm q-mt-sm">
+    <!-- 是否建立範本 -->
+    <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm">
       <div
-        class="col-12 q-mb-sm"
-        style="border-bottom:1px solid rgba(0,0,0,0.21)"
+        class="col-12 col-md-6 "
+        style="display:flex;flex-direction:column;"
+        :style="
+          $q.screen.lt.sm
+            ? 'flex-direction:row;border:1px solid rgba(0,0,0,0.24);padding-top:0px;margin-left:8px;padding-left:4px;width:inherit;flex:1;margin-top:8px;border-radius:4px;'
+            : ''
+        "
       >
-        <span class="text-center" style="font-size:16px;font-weight:bold;"
-          >審核作業</span
+        <span class="" :style="$q.screen.lt.sm ? 'padding-top:10px;' : ''"
+          >狀態</span
         >
+
+        <q-option-group
+          style="margin-left:-12px;"
+          v-model="dataForm.is_template"
+          :options="isTemplateOptions"
+          inline
+          type="radio"
+          class=""
+        />
+        <!-- <q-toggle
+                v-model="dataForm.is_template"
+                class="this"
+                style="padding-left:0px;"
+                checked-icon="check"
+                color="green"
+                unchecked-icon="clear"
+                :false-value="0"
+                :true-value="1"
+                size="lg"
+              /> -->
       </div>
-      <div class="col-12" :style="$q.screen.lt.sm ? 'order:2' : ''">
-        <com-input
-          v-model="dataForm.approval_suggestion"
-          form-label="簽核意見"
-          type="textarea"
-        ></com-input>
-      </div>
-      <div class="col-12 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
-        <com-select
-          ref="comCheck"
-          v-model="dataForm.approval_ststus"
-          outlined
-          behavior="menu"
-          :options="approvalOptions"
-          dense
-          emit-value
-          map-options
-          form-label="下個流程"
-          :required-valid="false"
-        ></com-select>
-      </div>
-      <div class="col-12" :style="$q.screen.lt.sm ? 'order:2' : ''">
-        <q-markup-table>
-          <thead>
-            <tr>
-              <th
-                class="`text-${col.align}`"
-                v-for="(col, index) in tableApprovalColumns"
-                :key="index"
-              >
-                {{ col.label }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in tableApprovalData" :key="item.id">
-              <td class="text-center">{{ item.id }}</td>
-              <td class="text-center">{{ item.type }}</td>
-              <td class="text-center">
-                <div class="" style="display:flex;flex-direction:column;">
-                  <span
-                    class=""
-                    v-for="(item, index) in item.applicant_info.split(',')"
-                    :key="item"
-                    >{{ item }}</span
-                  >
-                </div>
-              </td>
-              <td class="text-center">{{ item.applied_date }}</td>
-              <td class="text-center">{{ item.approval_result }}</td>
-              <td class="text-center">{{ item.approval_suggestion }}</td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </div>
-    </div> -->
-    <!--  -->
+    </div>
+
     <div
       class="row col-12 q-col-gutter-x-sm q-col-gutter-y-sm q-mt-md "
-      :class="$q.screen.lt.sm?'justify-center':'justify-end'"
+      :class="$q.screen.lt.sm ? 'justify-center' : 'justify-end'"
     >
       <div class="q-pa-md q-gutter-sm">
         <q-btn
@@ -378,16 +367,9 @@
           color="white"
           text-color="black"
           label="取消"
-          v-close-popup
+          @click="reset()"
         />
-        <q-btn
-          type="submit"
-          size="sm"
-          color="white"
-          text-color="black"
-          label="套用"
-          @click="usedTemplate()"
-        />
+
         <q-btn
           type="submit"
           size="sm"
@@ -408,33 +390,38 @@
   </div>
 </template>
 <script>
+import TinyMce from "@/components/TinyMce/TinyMce.vue";
 import BaseImageInput from "@/components/Common/BaseImageInput";
 import ComInput from "@/components/Common/form/ComInput";
 import ComSelect from "@/components/Common/form/ComSelect";
 import ComSelectDate from "@/components/Common/form/ComSelectDate";
-import { asistancetimeOptions } from "@/utils/common/dropdown-list.js";
-const approvalOptions = [
-  { label: "流程一", value: 1 },
-  { label: "流程二", value: 2 },
-  { label: "流程三", value: 3 },
-  { label: "流程四", value: 4 },
-];
+import { asistancetimeOptions,isTemplateOptions } from "@/utils/common/dropdown-list.js";
+import Mixin from "@/utils/mixin";
 const typeOptions = [
   { label: "服務類型1", value: 1 },
   { label: "服務類型2", value: 2 },
   { label: "服務類型3", value: 3 },
   { label: "服務類型4", value: 4 },
 ];
+
+const templateOptions = [
+  { label: "範本1", value: 1 },
+  { label: "範本2", value: 2 },
+  { label: "範本3", value: 3 },
+  { label: "範本4", value: 4 },
+  { label: "範本5", value: 5 },
+  { label: "範本6", value: 6 },
+];
 export default {
-  // 組件參數 接收來自父組件的數據
-  props: {},
-  // 局部注冊的組件
-  components: { ComInput, ComSelect, BaseImageInput, ComSelectDate },
+  mixins: [Mixin],
+  components: { TinyMce, ComInput, ComSelect, BaseImageInput, ComSelectDate },
   data() {
     return {
+      templateOptions,  // 範本選擇
+      isTemplateOptions, // 是否設為範本
       typeOptions,
       asistancetimeOptions,
-      approvalOptions,
+      picked_template: "", // 選擇套用範本
       dataForm: {
         tour_image: "", // 活動圖片
         name: "", // 活動名稱
@@ -454,8 +441,7 @@ export default {
           // 服務類型設定
           // {name:1,picked_time:3}  //example
         ],
-        approval_suggestion: "", // 簽核意見
-        approval_ststus: "", // 下個簽核流程
+        is_template:0,  //是否設為範本
       },
       // 服務類型表格
       tableColumns: [
@@ -477,63 +463,7 @@ export default {
         picked_time: "", // 時間段(以id 表示)
       },
 
-      tableApprovalColumns: [
-        // 審核流程表格 =>要對應db
-        {
-          name: "id",
-          label: "序號",
-          field: "id",
-          align: "center",
-        },
-        {
-          name: "type",
-          label: "種類",
-          field: "type",
-          align: "center",
-        },
-        {
-          name: "applicant_info", // 申請人資訊
-          label: "姓名/職務/部門",
-          field: "name",
-          align: "center",
-        },
-        {
-          name: "applied_date", // 對應 db 申請時間
-          label: "處理時間",
-          field: "applied_date",
-          align: "center",
-        },
-        {
-          name: "approval_result",
-          label: "審核結果",
-          field: "approval_result",
-          align: "center",
-        },
-        {
-          name: "approval_suggestion",
-          label: "審核意見",
-          field: "approval_suggestion",
-          align: "center",
-        },
-      ],
-      tableApprovalData: [
-        {
-          id: "1",
-          type: "遊程上架申請",
-          applicant_info: "白晶晶,財政局支付科_承辦人,財政局支付科",
-          applied_date: "2019-12-25",
-          approval_result: "退回",
-          approval_suggestion: "資訊不完全",
-        },
-        {
-          id: "2",
-          type: "遊程上架申請",
-          applicant_info: "林泰山,財政局秘書室_承辦人,財政局秘書室",
-          applied_date: "2021-02-25",
-          approval_result: "通過",
-          approval_suggestion: "",
-        },
-      ],
+
     };
   },
   filters: {
@@ -579,8 +509,7 @@ export default {
               // 服務類型設定
               // { service_id: "", asistancetime_id: "" },
             ],
-            approval_suggestion: "", // 簽核意見
-            approval_ststus: "", // 下個簽核流程
+            is_template:0,
           };
           break;
       }
@@ -605,14 +534,23 @@ export default {
         this.dataForm.service_list.splice(idx, 1);
       }
     },
+    reset() {
+      //取消
+    },
     onSubmit() {
       // 送審
     },
     onSave() {
       //保存
     },
-    usedTemplate() {
+    useTemplate(e) {
       //套用
+      this.showLoading(`選擇id為${e}的範本`);
+    },
+    onClick(e, editor) {
+      console.log("Element clicked");
+      console.log(e);
+      console.log(editor);
     },
   },
 };

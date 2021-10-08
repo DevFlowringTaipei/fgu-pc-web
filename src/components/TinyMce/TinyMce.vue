@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import tinymce from "tinymce/tinymce"; //tinymce默認hidden，不引入不顯示
 import Editor from "@tinymce/tinymce-vue"; //编辑器引入
 import "tinymce/themes/silver/theme"; //編輯器主題
@@ -116,9 +115,11 @@ export default {
       myValue: this.value,
       init: {
         selector: "#tinymce",
-        language_url: process.env.NODE_ENV === "production" ?"../tinymce/langs/zh_TW.js":"../../../public/tinymce/langs/zh_TW.js",
+        // language_url: process.env.NODE_ENV === "production" ?"../tinymce/langs/zh_TW.js":"../../../public/tinymce/langs/zh_TW.js",
+        language_url: "/tinymce/langs/zh_TW.js",
         language: "zh_TW",
-        skin_url: process.env.NODE_ENV === "production" ?"../tinymce/skins/ui/oxide":"../../../public/tinymce/skins/ui/oxide", //皮膚
+        // skin_url: process.env.NODE_ENV === "production" ?"../tinymce/skins/ui/oxide":"../../../public/tinymce/skins/ui/oxide", //皮膚
+        skin_url: "/tinymce/skins/ui/oxide", //皮膚
         plugins: this.plugins, //插件
         //工具欄
         toolbar: this.toolbar,
