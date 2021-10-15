@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    
     <q-btn v-if="$route.name=='PageDetail'" icon="chevron_left" label='返回查詢頁' @click="goBack"></q-btn>
     <q-tabs
       v-else
