@@ -12,7 +12,7 @@ const routes = [
       // 佛大育成
 
       {
-        path: "/account",
+        path: "/",
         name: "AccountIndex",
         component: () => import("@/views/AccountManagement"),
         children:[

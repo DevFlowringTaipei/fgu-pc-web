@@ -39,9 +39,29 @@
             >
             </q-select>
           </div>
+          <!-- 日期 -->
+      <div :class="$q.screen.lt.sm ? 'col-6 q-mb-sm' : ''">
+        <q-input outlined dense v-model="searchForm.date">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                ref="qDateProxy"
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="searchForm.date" mask="YYYY-MM-DD">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
 
           <!-- button -->
-          <div :class="$q.screen.lt.sm ? 'col-6 ' : ''">
+          <div :class="$q.screen.lt.sm ? 'col-12 ' : ''">
             <q-btn
               color="primary"
               label="搜尋"
@@ -781,6 +801,7 @@ export default {
       searchForm: {
         keyword: "",
         type: "",
+        date:""
       },
       page: {
         pageSize: 20,

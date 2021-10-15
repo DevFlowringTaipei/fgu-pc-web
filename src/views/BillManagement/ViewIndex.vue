@@ -43,13 +43,15 @@
       >
         <span style="font-size:30px;">全部{{ identity }}收入分布</span>
       </div>
-      <div class="col-6">
+      <div :class="$q.screen.lt.sm ? 'col-12 q-mb-sm this' : 'col-6'" >
         <div ref="myChart" style="width: 100%;height:400px;"></div>
       </div>
-      <div class="col-6 relative-position">
+
+      <div :class="$q.screen.lt.sm ? 'col-12 q-mb-sm' : 'col-6 relative-position '"> 
         <q-card
-          class="bg-secondary text-white absolute-center q-pa-md"
-          style="width:60%;"
+        class="bg-secondary text-white q-pa-md"
+        :class="$q.screen.lt.sm ? '' : 'absolute-center'"
+          :style="$q.screen.lt.sm ?'width:100%;':'width:60%;'"
         >
           <q-card-section>
             <div class="text-h6 q-mb-md">總收入</div>

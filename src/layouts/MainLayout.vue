@@ -85,7 +85,7 @@ export default {
         </q-item>
 
         <q-item
-          to="/account"
+          to="/"
           active-class="q-item-no-link-highlighting"
           expand-icon-class="text-white"
         >

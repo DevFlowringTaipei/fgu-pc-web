@@ -12,6 +12,7 @@
       >
       <q-select
         outlined
+        :readonly="id_data.status |transTourStatus"
         v-model="id_data.picked_template"
         stack-label
         :options="templateOptions"
@@ -20,11 +21,12 @@
         emit-value
         map-options
         :option-label="(item) => (item === '' ? '請選擇套用範本' : item.label)"
-        :style="$q.screen.lt.sm ? 'width:200px;' : 'width:200px;margin-left:10px;'"
+        :style="
+          $q.screen.lt.sm ? 'width:200px;' : 'width:200px;margin-left:10px;'
+        "
         @input="useTemplate"
       >
       </q-select>
-
     </div>
     <!-- 基本資料 -->
     <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm">
@@ -46,14 +48,14 @@
         <div class="row q-col-gutter-x-sm q-col-gutter-y-md">
           <div class="col-6 col-md-4">
             <com-input
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               v-model="id_data.name"
               form-label="活動名稱"
             ></com-input>
           </div>
           <div class="col-6 col-md-4">
             <com-input
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               v-model="id_data.location"
               form-label="活動地點"
             ></com-input>
@@ -61,7 +63,7 @@
 
           <div class="col-6 col-md-4">
             <com-select-date
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               :range="false"
               :required="false"
               v-model="id_data.started_date"
@@ -71,7 +73,7 @@
           </div>
           <div class="col-6 col-md-4">
             <com-input
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               v-model="id_data.leader_num"
               form-label="帶領人需求人數"
               :style="$q.screen.lt.sm ? 'width:100%;' : ''"
@@ -79,14 +81,14 @@
           </div>
           <div class="col-6 col-md-4">
             <com-input
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               v-model="id_data.people_num"
               form-label="活動人數"
             ></com-input>
           </div>
           <div class="col-6 col-md-4">
             <com-input
-              :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+              :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
               v-model="id_data.min_num"
               form-label="最低開團人數"
             ></com-input>
@@ -105,7 +107,7 @@
         style="overflow:hidden;"
       >
         <tiny-mce
-          v-if="id_data.status == '退回'||id_data.status == '草稿'"
+          v-if="id_data.status == '退回' || id_data.status == '草稿'"
           ref="editor"
           v-model="id_data.desc"
           @onClick="onClick"
@@ -114,7 +116,7 @@
       </div>
       <div class="col-12" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.notice"
           form-label="注意事項/安全守則"
           type="textarea"
@@ -122,35 +124,35 @@
       </div>
       <div class="col-6 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.contact_person"
           form-label="聯絡人"
         ></com-input>
       </div>
       <div class="col-6 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.contact_phone"
           form-label="聯絡人手機"
         ></com-input>
       </div>
       <div class="col-12 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.contact_email"
           form-label="聯絡人Email"
         ></com-input>
       </div>
       <div class="col-6 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.total_hour"
           form-label="活動時程(小時)"
         ></com-input>
       </div>
       <div class="col-6 col-md-4" :style="$q.screen.lt.sm ? 'order:2' : ''">
         <com-input
-          :readonly="id_data.status !== '退回'||id_data.status !== '草稿'"
+          :readonly="id_data.status !== '退回' || id_data.status !== '草稿'"
           v-model="id_data.total_price"
           form-label="活動費用"
         ></com-input>
@@ -170,13 +172,16 @@
               >
                 {{ col.label }}
               </th>
-              <th v-if="id_data.status == '退回'||id_data.status == '草稿'" class="`text-center`">
+              <th
+                v-if="id_data.status == '退回' || id_data.status == '草稿'"
+                class="`text-center`"
+              >
                 操作
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="id_data.status == '退回'||id_data.status == '草稿'">
+            <tr v-if="id_data.status == '退回' || id_data.status == '草稿'">
               <td class="text-center">
                 <q-select
                   dense
@@ -230,7 +235,10 @@
                 {{ item.picked_time | transPickedTimeName }}
               </td>
 
-              <td v-if="id_data.status == '退回'||id_data.status == '草稿'" class="text-center">
+              <td
+                v-if="id_data.status == '退回' || id_data.status == '草稿'"
+                class="text-center"
+              >
                 <q-btn
                   round
                   size="xs"
@@ -245,7 +253,10 @@
       </div>
 
       <div v-if="$q.screen.lt.sm" class="col-12">
-        <div v-if="id_data.status == '退回'||id_data.status == '草稿'" class="q-mb-sm ">
+        <div
+          v-if="id_data.status == '退回' || id_data.status == '草稿'"
+          class="q-mb-sm "
+        >
           <com-select
             ref="comCheck"
             v-model="serviceItem.name"
@@ -259,7 +270,10 @@
             :required-valid="false"
           ></com-select>
         </div>
-        <div v-if="id_data.status == '退回'||id_data.status == '草稿'" class="q-mb-sm ">
+        <div
+          v-if="id_data.status == '退回' || id_data.status == '草稿'"
+          class="q-mb-sm "
+        >
           <com-select
             ref="comCheck"
             v-model="serviceItem.picked_time"
@@ -274,7 +288,10 @@
           ></com-select>
         </div>
 
-        <div v-if="id_data.status == '退回'||id_data.status == '草稿'" class="q-mb-sm ">
+        <div
+          v-if="id_data.status == '退回' || id_data.status == '草稿'"
+          class="q-mb-sm "
+        >
           <q-btn
             style="font-size:12px;width:100%;"
             class=""
@@ -303,7 +320,9 @@
               :style="props.selected ? 'transform: scale(0.95);' : ''"
             >
               <q-card :class="props.selected ? 'bg-grey-2' : ''">
-                <q-card-section v-if="id_data.status == '退回'||id_data.status == '草稿'">
+                <q-card-section
+                  v-if="id_data.status == '退回' || id_data.status == '草稿'"
+                >
                   <div
                     class=""
                     style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;"
@@ -345,7 +364,7 @@
       </div>
     </div>
 
-     <!-- 是否建立範本 -->
+    <!-- 是否建立範本 -->
     <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm">
       <div
         class="col-12 col-md-6 "
@@ -361,6 +380,9 @@
         >
 
         <q-option-group
+          :disable="
+            id_data.status |transTourStatus
+          "
           style="margin-left:-12px;"
           v-model="id_data.is_template"
           :options="isTemplateOptions"
@@ -371,7 +393,10 @@
       </div>
     </div>
     <!-- 審核 -->
-    <div v-if="id_data.status !== '草稿'" class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm q-mt-sm">
+    <div
+      v-if="id_data.status !== '草稿'"
+      class="row  q-col-gutter-x-sm q-col-gutter-y-sm  q-mb-sm q-mt-sm"
+    >
       <div
         class="col-12 q-mb-sm"
         style="border-bottom:1px solid rgba(0,0,0,0.21)"
@@ -414,13 +439,14 @@
             </tr>
           </tbody>
         </q-markup-table>
-        <q-card flat  v-else >
+        <q-card flat v-else>
           <div style="display:flex;justify-content:center;align-items:center;">
-            
-            <q-spinner-comment size="xl" color="deep-purple" ></q-spinner-comment>
+            <q-spinner-comment
+              size="xl"
+              color="deep-purple"
+            ></q-spinner-comment>
             <span class="text-h6">審核處理中</span>
           </div>
-
         </q-card>
       </div>
     </div>
@@ -429,7 +455,10 @@
       class="row col-12 q-col-gutter-x-sm q-col-gutter-y-sm q-mt-md "
       :class="$q.screen.lt.sm ? 'justify-center' : 'justify-end'"
     >
-      <div v-if="id_data.status == '退回'||id_data.status == '草稿'"  class="q-pa-md q-gutter-sm">
+      <div
+        v-if="id_data.status == '退回' || id_data.status == '草稿'"
+        class="q-pa-md q-gutter-sm"
+      >
         <q-btn
           type="reset"
           size="sm"
@@ -455,7 +484,7 @@
         />
       </div>
       <div v-else>
-          <q-btn
+        <q-btn
           size="md"
           color="primary"
           text-color="white"
@@ -472,7 +501,10 @@ import BaseImageInput from "@/components/Common/BaseImageInput";
 import ComInput from "@/components/Common/form/ComInput";
 import ComSelect from "@/components/Common/form/ComSelect";
 import ComSelectDate from "@/components/Common/form/ComSelectDate";
-import { asistancetimeOptions,isTemplateOptions } from "@/utils/common/dropdown-list.js";
+import {
+  asistancetimeOptions,
+  isTemplateOptions,
+} from "@/utils/common/dropdown-list.js";
 import Mixin from "@/utils/mixin";
 const typeOptions = [
   { label: "帆船", value: 1 },
@@ -493,7 +525,6 @@ const templateOptions = [
   { label: "範本6", value: 6 },
 ];
 
-
 export default {
   mixins: [Mixin],
   // 局部注冊的組件
@@ -507,7 +538,7 @@ export default {
       data: [
         {
           id: 1,
-          picked_template:1,
+          picked_template: 1,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "這是遊程主題1(This is title 1)",
           service_list: [
@@ -529,7 +560,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 3999, //
-          is_template:0,
+          is_template: 0,
           approval_history: [
             {
               id: "1",
@@ -544,7 +575,7 @@ export default {
         },
         {
           id: 2,
-          picked_template:2,
+          picked_template: 2,
           tour_image: "https://cdn.quasar.dev/img/parallax2.jpg",
           name: "這是遊程主題2(This is title 2)",
           service_list: [
@@ -566,7 +597,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 1999,
-          is_template:1,
+          is_template: 1,
           approval_history: [
             // 審核中不會有任何審核資訊
           ],
@@ -574,7 +605,7 @@ export default {
         },
         {
           id: 3,
-          picked_template:3,
+          picked_template: 3,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "這是遊程主題3(This is title 3)",
           service_list: [
@@ -596,7 +627,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 1599,
-          is_template:0,
+          is_template: 0,
           approval_history: [
             {
               id: "1",
@@ -612,7 +643,7 @@ export default {
         },
         {
           id: 4,
-          picked_template:4,
+          picked_template: 4,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "這是遊程主題4(This is title 4)",
           service_list: [{ name: 5, picked_time: 3 }],
@@ -631,7 +662,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 1799,
-          is_template:1,
+          is_template: 1,
           approval_history: [
             {
               id: "1",
@@ -647,7 +678,7 @@ export default {
         },
         {
           id: 5,
-          picked_template:5,
+          picked_template: 5,
           tour_image: "https://cdn.quasar.dev/img/parallax2.jpg",
           name: "這是遊程主題5(This is title 5)",
           service_list: [{ name: 6, picked_time: 4 }],
@@ -666,7 +697,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 999,
-          is_template:1,
+          is_template: 1,
           approval_history: [
             {
               id: "1",
@@ -690,7 +721,7 @@ export default {
         },
         {
           id: 6,
-          picked_template:6,
+          picked_template: 6,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "這是宜蘭礁溪遊程主題6(This is title 6)",
           service_list: [
@@ -712,13 +743,13 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 4999,
-          is_template:0,
+          is_template: 0,
           approval_history: [],
           status: "審核中",
         },
         {
           id: 7,
-          picked_template:3,
+          picked_template: 3,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "花蓮一日遊",
           service_list: [
@@ -740,13 +771,13 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 4999,
-          is_template:1,
+          is_template: 1,
           approval_history: [],
           status: "草稿",
         },
         {
           id: 8,
-          picked_template:4,
+          picked_template: 4,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "高雄一日遊",
           service_list: [
@@ -768,13 +799,13 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 4999,
-          is_template:0,
+          is_template: 0,
           approval_history: [],
           status: "草稿",
         },
         {
           id: 9,
-          picked_template:1,
+          picked_template: 1,
           tour_image: "https://cdn.quasar.dev/img/parallax1.jpg",
           name: "基隆美食之旅",
           service_list: [
@@ -796,7 +827,7 @@ export default {
           contact_email: "superman@gmail.com", // 聯絡人email
           total_hour: "8", //
           total_price: 4999,
-          is_template:1,
+          is_template: 1,
           approval_history: [],
           status: "草稿",
         },
@@ -911,6 +942,13 @@ export default {
     },
     transPickedTimeName(val) {
       return asistancetimeOptions.find((item) => item.value == val).label;
+    },
+    transTourStatus(val) {
+      if (val === "通過" || val === "審核中") {
+        return true;
+      } else if (val === "退回" || val === "草稿") {
+        return false;
+      }
     },
   },
   created() {

@@ -24,9 +24,29 @@
         >
         </q-select>
       </div>
+      <!-- 日期 -->
+      <div :class="$q.screen.lt.sm ? 'col-6 q-mb-sm' : ''">
+        <q-input outlined dense v-model="searchForm.date">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                ref="qDateProxy"
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="searchForm.date" mask="YYYY-MM-DD">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
 
       <!-- button -->
-      <div :class="$q.screen.lt.sm ? 'col-6 ' : ''">
+      <div :class="$q.screen.lt.sm ? 'col-12 ' : ''">
         <q-btn
           color="primary"
           label="搜尋"
@@ -206,7 +226,7 @@
                 color="primary"
                 label="詳細資訊"
                 size="md"
-                @click="goTo('PageDetail',item.id)"
+                @click="goTo('PageDetail', item.id)"
               ></q-btn>
             </div>
           </q-card-section>
@@ -267,7 +287,7 @@
 </template>
 <script>
 import ComPagination from "@/components/Common/form/ComPagination";
-import Mixin from '@/utils/mixin'
+import Mixin from "@/utils/mixin";
 const typeOptions = [
   { label: "專才", value: 1 },
   { label: "遊程", value: 2 },
@@ -280,7 +300,7 @@ const rowOptions = [
   { label: "200筆/頁", value: 200 },
 ];
 export default {
-  mixins:[Mixin],
+  mixins: [Mixin],
   // 局部注冊的組件
   components: { ComPagination },
   data() {
@@ -292,6 +312,7 @@ export default {
       searchForm: {
         keyword: "",
         type: "",
+        date: "",
       },
       page: {
         pageSize: 20,
@@ -377,7 +398,7 @@ export default {
         ],
         cardData2: [
           {
-            id:1,
+            id: 1,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)1",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -390,7 +411,7 @@ export default {
             price: 3999,
           },
           {
-            id:2,
+            id: 2,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)2",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -403,7 +424,7 @@ export default {
             price: 1999,
           },
           {
-            id:3,
+            id: 3,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)3",
             services: [
@@ -422,7 +443,7 @@ export default {
             price: 1599,
           },
           {
-            id:4,
+            id: 4,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)4",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -435,7 +456,7 @@ export default {
             price: 1799,
           },
           {
-            id:5,
+            id: 5,
             img: "https://cdn.quasar.dev/img/parallax1.jpg",
             name: "這是主題(This is title)5",
             services: ["服務類型1", "服務類型2", "服務類型3"],
@@ -448,7 +469,7 @@ export default {
             price: 999,
           },
           {
-            id:6,
+            id: 6,
             img: "https://cdn.quasar.dev/img/parallax2.jpg",
             name: "這是主題(This is title)6",
             services: ["服務類型1", "服務類型2", "服務類型3"],
