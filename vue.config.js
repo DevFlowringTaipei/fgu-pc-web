@@ -5,7 +5,8 @@ module.exports = {
       rtlSupport: true,
     },
   },
-  publicPath: process.env.NODE_ENV === "production" ? "/fgu-pc-web/" : "/",
+  // publicPath: process.env.NODE_ENV === "production" ? "/fgu-pc-web/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
   transpileDependencies: ["quasar"],
   devServer: {
     port: 8081, //端口號
