@@ -5,26 +5,23 @@
 </template>
 
 <script>
-
-
 export default {
-  name: 'Door',
+  name: "Door",
 
-  components: {
-    
+  components: {},
+  created() {
+    // 初始化用戶訊息
+    this.$store.commit("initUser");
   },
-
-  data () {
-    return {
-      
-    }
-  }
-}
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style>
-.this{
-  border:1px solid red;
+.this {
+  border: 1px solid red;
 }
 html {
   scroll-behavior: smooth;

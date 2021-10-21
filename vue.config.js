@@ -8,7 +8,7 @@ module.exports = {
   publicPath: process.env.NODE_ENV === "production" ? "/fgu-pc-web/" : "/",
   transpileDependencies: ["quasar"],
   devServer: {
-    port: 8080, //端口號
+    port: 8081, //端口號
     host: "localhost", //主機名
     https: false, //協議
     open: true, //啟動時是否自動打開瀏覽器

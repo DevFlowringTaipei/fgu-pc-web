@@ -29,8 +29,15 @@
             <div class="col-12 col-md-2 q-mb-sm"></div>
             <div class="col-12 col-md-4">
               <com-input
-                v-model="settingForm.account"
+                v-model="settingForm.loginId"
+                readonly
                 form-label="帳號"
+                style="width:250px;margin-bottom:10px;"
+                :style="$q.screen.lt.sm ? 'width:100%;' : ''"
+              ></com-input>
+              <com-input
+                v-model="settingForm.laleLoginId"
+                form-label="Lale帳號"
                 style="width:250px;margin-bottom:10px;"
                 :style="$q.screen.lt.sm ? 'width:100%;' : ''"
               ></com-input>
@@ -54,6 +61,7 @@
               ></com-input>
             </div>
           </div>
+
           <!-- 送出鍵 -->
           <div
             class="row col-12 q-col-gutter-x-sm q-col-gutter-y-sm q-mt-md justify-end"
@@ -70,8 +78,8 @@
                 type="submit"
                 size="sm"
                 color="primary"
-                label="保存"
-                @click="onSubmit"
+                label="保存更新"
+                @click="onSave"
               />
             </div>
           </div>
@@ -82,7 +90,7 @@
           <div class="row  q-col-gutter-x-sm q-col-gutter-y-sm">
             <div class="col-12 col-md-4 q-mb-sm">
               <com-input
-                v-model="editPwdForm.old_pwd"
+                v-model="editPwdForm.oldPassword"
                 form-label="舊密碼"
                 style="width:250px;margin-bottom:10px;"
                 :style="$q.screen.lt.sm ? 'width:100%;' : ''"
@@ -90,19 +98,53 @@
             </div>
             <div class="col-12 col-md-4 q-mb-sm">
               <com-input
-                v-model="editPwdForm.new_pwd"
+                v-model="editPwdForm.newPassword"
                 form-label="新密碼"
                 style="width:250px;margin-bottom:10px;"
                 :style="$q.screen.lt.sm ? 'width:100%;' : ''"
-              ></com-input>
+                :type="isPwd ? 'password' : 'text'"
+                hide-bottom-space
+                :rules="[
+                  (val) => (val !== null && val !== '') || '此欄位為必填項',
+                  (val) =>
+                    (val.length > 6 && val.length < 20) ||
+                    '請輸入6~20位英文字母或符號(不得為空白)或數字混合',
+                ]"
+              >
+                <template v-slot:hint>
+                  請輸入6~20位英文字母或符號(不得為空白)或數字混合
+                </template>
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </com-input>
             </div>
             <div class="col-12 col-md-4 q-mb-sm">
               <com-input
-                v-model="editPwdForm.new_again_pwd"
+                v-model="editPwdForm.newPassword_again"
                 form-label="請再輸入一次新密碼"
                 style="width:250px;margin-bottom:10px;"
                 :style="$q.screen.lt.sm ? 'width:100%;' : ''"
-              ></com-input>
+                :type="isPwd2 ? 'password' : 'text'"
+                hide-bottom-space
+                :rules="[
+                  (val) =>
+                    (val && val === editPwdForm.newPassword) ||
+                    '兩次密碼不同',
+                ]"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd2 ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd2 = !isPwd2"
+                  />
+                </template>
+              </com-input>
             </div>
           </div>
           <!-- 送出鍵 -->
@@ -122,7 +164,7 @@
                 size="sm"
                 color="primary"
                 label="保存"
-                @click="onSubmit"
+                @click="updatePwd"
               />
             </div>
           </div>
@@ -132,37 +174,73 @@
   </div>
 </template>
 <script>
+import { mapState, mapGetters } from "vuex";
+import { updatePassword } from "@/api/user";
 import BaseImageInput from "@/components/Common/BaseImageInput";
 import ComInput from "@/components/Common/form/ComInput";
+import Mixin from "@/utils/mixin";
 export default {
-  // 組件參數 接收來自父組件的數據
-  props: {},
-  // 局部注冊的組件
+  mixins: [Mixin],
+
   components: { BaseImageInput, ComInput },
   data() {
     return {
       tab: "editPersonal",
       settingForm: {
-        account: "",
-        name: "",
         email: "",
         phone: "",
+        name: "", // 名稱
+        laleLoginId: "", // lale 帳號
+        loginId: "", //  帳號
       },
       editPwdForm: {
-        old_pwd: "",
-        new_pwd: "",
-        new_again_pwd: "",
+        oldPassword: "",
+        newPassword: "",
+        newPassword_again: "",
       },
+      isPwd: true,
+      isPwd2: true,
     };
   },
-  created() {},
+  created() {
+    this.initUser();
+  },
   // 計算屬性
-  computed: {},
+  computed: {
+    // ...mapState({
+    //   user: (state) => state.user.user,
+    // }),
+    ...mapGetters(["getUser"]),
+  },
   // 偵聽器
   watch: {},
   // 組件方法
   methods: {
-    onSubmit() {},
+    initUser() {
+      this.settingForm = this.getUser;
+    },
+    async updatePwd() {
+      // 修改密碼
+
+      await updatePassword(this.editPwdForm)
+        .then((res) => {
+          if (res.status === 200) {
+            this.$q.notify({
+              color:'blue',
+              textColor: "white",
+              icon: "success",
+              message: "密碼修改成功，請重新登入。",
+            });
+            // 刪除用戶所有資料
+            this.$store.commit("logout");
+            this.goTo("Login");
+          }
+        })
+        .catch((err) => {
+          console.log("updatePassword err=>", err);
+        });
+    },
+    onSave() {},
   },
 };
 </script>

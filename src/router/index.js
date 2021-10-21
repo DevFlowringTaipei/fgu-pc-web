@@ -197,4 +197,57 @@ const router = new VueRouter({
   routes,
 });
 
+// 全局前置守衛  // BAD
+router.beforeEach((to, from, next) => {
+  // 獲取 token
+  let token = window.localStorage.getItem('token')
+  // 
+  let user = window.localStorage.getItem('user')
+  
+  if (token) {
+    /**
+     * 已登入
+     * */
+    // 防止重複登入
+    if (to.path === '/login') {
+      return next({ name: from.name ? from.name : 'Home' })
+    }
+
+    // 目前無權限驗證
+    // // 其他驗證...
+    // if (to.name !== 'error_404') {
+    //   // 超級管理員跳過驗證
+    //   if (user ) {
+    //     user = JSON.parse(user)
+    //     if(user.super === 1) return next()
+    //   }
+    //   // 驗證
+    //   let rules = window.sessionStorage.getItem('rules')
+    //   rules = rules ? JSON.parse(rules) : []
+
+    //   let index = rules.findIndex((item) => {
+    //     return item.rule_id > 0 && item.desc === to.name //找到表示有權限
+    //   })
+
+    //   if (index === -1) {
+    //     this.$message.error('你無此權限')
+    //     return next({ name: from.name ? from.name : 'error_404' }) // 跳到固定頁面-404
+    //   }
+    // }
+
+    next()
+  } else {
+    /**
+     * 未登入
+     * */
+
+    // 跳過登入頁驗證
+    if (to.path === '/login'||to.path==='/signup'||to.path==='/forgetpasswrd') {
+      return next()
+    }
+    next({ path: '/login' })
+  }
+  
+})
+
 export default router;

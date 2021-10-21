@@ -17,7 +17,7 @@
           </label>
           <q-select
             outlined
-            v-model="signupForm.indentity"
+            v-model="signupForm.memType"
             stack-label
             behavior="menu"
             :options="signUpIdentityOptions"
@@ -33,36 +33,59 @@
         <div class="row ">
           <div class="col-12  q-mb-md">
             <label v-if="!$q.screen.lt.sm">
-              <span>Lale公號名稱</span>
+              <span>Lale帳號</span>
             </label>
             <q-input
-              ref="laleRef"
-              v-model="signupForm.lale_name"
+              ref="laleIdRef"
+              v-model="signupForm.laleLoginId"
               dense
               outlined
-              :label="$q.screen.lt.sm ? 'Lale公號名稱' : void 0"
+              :label="$q.screen.lt.sm ? 'Lale帳號' : void 0"
               size="sm"
               hide-bottom-space
               :rules="[(val) => (val && val.length > 0) || '此欄位為必填項']"
             >
             </q-input>
           </div>
+       
+            <div class="col-12  q-mb-md">
+              <label v-if="!$q.screen.lt.sm">
+                <span>姓名</span>
+              </label>
+              <q-input
+                ref="newRef"
+                v-model="signupForm.name"
+                dense
+                outlined
+                :label="$q.screen.lt.sm ? '姓名' : void 0"
+                size="sm"
+                hide-bottom-space
+                :rules="[(val) => (val && val.length > 0) || '此欄位為必填項']"
+              >
+              </q-input>
+            </div>
+  
           <div class="col-12  q-mb-md">
             <label v-if="!$q.screen.lt.sm">
               <span>登入帳號</span>
             </label>
             <q-input
               ref="accountRef"
-              v-model="signupForm.email"
+              v-model="signupForm.loginId"
               dense
               outlined
               :label="$q.screen.lt.sm ? '登入帳號' : void 0"
               size="sm"
               hide-bottom-space
-              :rules="[(val) => (val && val.length > 0) || '此欄位為必填項']"
+              :rules="[
+                (val) => (val !== null && val !== '') || '此欄位為必填項',
+                (val) =>
+                  (val.length > 6 && val.length < 20) ||
+                  '請輸入6~20位英文字母或數字混合',
+              ]"
             >
               <template v-slot:hint>
-                請以Email註冊
+                請輸入6~20位英文字母或數字混合
               </template>
             </q-input>
           </div>
@@ -79,8 +102,16 @@
               size="sm"
               :type="isPwd ? 'password' : 'text'"
               hide-bottom-space
-              :rules="[(val) => (val && val.length > 0) || '此欄位為必填項']"
+              :rules="[
+                (val) => (val !== null && val !== '') || '此欄位為必填項',
+                (val) =>
+                  (val.length > 6 && val.length < 20) ||
+                  '請輸入6~20位英文字母或符號(不得為空白)或數字混合',
+              ]"
             >
+              <template v-slot:hint>
+                請輸入6~20位英文字母或符號(不得為空白)或數字混合
+              </template>
               <template v-slot:append>
                 <q-icon
                   :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -153,18 +184,20 @@
   </div>
 </template>
 <script>
+import { signup } from "@/api/user";
 import { signUpIdentityOptions } from "@/utils/common/dropdown-list.js";
-import Mixin from '@/utils/mixin'
+import Mixin from "@/utils/mixin";
 export default {
-  mixins:[Mixin],
+  mixins: [Mixin],
   data() {
     return {
       signUpIdentityOptions,
       signupForm: {
-        indentity: 1,
-        lale_name: "",
-        email: "",
-        password: "",
+        memType: 1, // 身分
+        name: "", // 名稱
+        laleLoginId: "", // lale 帳號
+        loginId: "", //  帳號
+        password: "", //
         password_check: "",
       },
       isPwd: true,
@@ -178,7 +211,34 @@ export default {
   watch: {},
   // 組件方法
   methods: {
-    onSubmit() {},
+    resetForm() {
+      this.signupForm = {
+        memType: 1, // 身分
+        loginId: "", // lale 帳號
+        name: "", //  帳號
+        password: "", //
+        password_check: "",
+      };
+    },
+    async onSubmit() {
+      await signup(this.signupForm)
+        .then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            this.$router.push({ name: "Login" });
+          } else {
+            this.resetForm();
+            this.$q.notify({
+              message: `註冊有誤`,
+              type: "error",
+              position: "top-right",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
